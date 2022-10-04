@@ -8,8 +8,7 @@
 	$errorMessage = 'Create a new user account';
 
 	//is email and Password provided?
-	if (isset($_POST['email']) && isset($_POST['password']) &&
-		isset($_POST['retxtPassword'])) {
+	if (isset($_POST['email'],$_POST['password'],$_POST['retxtPassword'],$_POST['firstName'],$_POST['lastName'] )){
 
 		//get userID and Password
 		
@@ -18,44 +17,57 @@
 		$firstName = htmlspecialchars($_POST['firstName']);
 		$lastName = htmlspecialchars($_POST['lastName']);
 		$email = htmlspecialchars($_POST['email']);
-		
-		if ($loginPassword == $reLoginPassword) {
-		
-		//connect to the database
-                $conn = new mysqli($server, $sqlUsername, $sqlPassword, $databaseName);
-		
-		//table to store username and password
-		$userTable = "users"; 
 
-		$ps = md5($loginPassword);
-			
-		$emailCheck="SELECT * FROM $userTable WHERE email='$email'";
-
-		$email_query=$conn->query($emailCheck);
-
-		if (mysqli_num_rows($email_query)<1)
+		if(!empty($loginPassword) &&!empty($reLoginPassword) &&!empty($firstName) &&!empty($lastName) &&!empty($email))
 		{
-		// Formulate the SQL statment to find the user
-		$sql = "INSERT INTO $userTable ( `firstname`,`lastname`, `email`, `password`)  VALUES ( '$firstName','$lastName', '$email', '$ps')";
 		
-		// Execute the query
-                $query_result = $conn->query($sql)
-			or die( "SQL Query ERROR. User can not be created.");
-		
-		// Go to the login page
-		header('Location: login.php');
-			exit;
+			if ($loginPassword == $reLoginPassword) {
+				
+				//connect to the database
+						$conn = new mysqli($server, $sqlUsername, $sqlPassword, $databaseName);
+				
+				//table to store username and password
+				$userTable = "users"; 
+
+				$ps = md5($loginPassword);
+					
+				$emailCheck="SELECT * FROM $userTable WHERE email='$email'";
+
+				$email_query=$conn->query($emailCheck);
+
+				if (mysqli_num_rows($email_query)<1)
+				{
+					// Formulate the SQL statment to find the user
+					$sql = "INSERT INTO $userTable ( `firstname`,`lastname`, `email`, `password`)  VALUES ( '$firstName','$lastName', '$email', '$ps')";
+					
+					// Execute the query
+							$query_result = $conn->query($sql)
+						or die( "SQL Query ERROR. User can not be created.");
+					
+					// Go to the login page
+					header('Location: login.php');
+						exit;
+
+				}
+				else 
+				{
+					$errorMessage = "There is an account with that email already";
+				}
+			} 
+			else {
+				$errorMessage = "Passwords do not match";
+				
+			}
+		}
+		else{
+			$errorMessage = "Please fill out all of the required infromation";
 
 		}
-		else 
-		{
-			$errorMessage = "There is an account with that email already";
-		}
-		} else {
-			$errorMessage = "Passwords do not match";
-			
-		}
+	}
 		
+	
+	else{
+		$errorMessage = "Please fill out all of the required infromation";
 	}
 ?>
 
@@ -75,7 +87,7 @@
 			
 		
 
-		<form action="" method="post" name="frmLogin" id="frmLogin">
+		<form action="" method="post" name="frmSignup" id="frmSignup">
             <Strong> <?php echo $errorMessage ?> </Strong>
 		 <table width="400" border="1" align="center" cellpadding="2" cellspacing="2">
          <tr>

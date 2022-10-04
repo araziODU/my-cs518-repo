@@ -13,6 +13,7 @@
 	
 		  <div id="centre">
 			<h1>Profile Information </h1>
+			<h2>To edit profile information press "Edit"</h2>
             <?php
 	//include information required to access database
 	require 'authentication.php'; 
@@ -52,7 +53,9 @@
    	while ($fieldMetadata = $query_result->fetch_field()) {
 		echo "<th>".$fieldMetadata->name."</th>";
     }
+	echo "<th></th>";
 	echo "</tr>";
+	
 			
 	// fetch table records
 	while ($line = $query_result->fetch_assoc()) {
@@ -60,10 +63,14 @@
 			foreach ($line as $cell) {
 				echo "<td> $cell </td>";
 			}
+			echo "<td  width=200 align=center>";
+			echo "<a href='editAdminProfile.php?email=" .$line['email'] ."'>  Edit  </a>";
+			echo "</td>";
         echo "</tr>\n";
     }
     echo "</table>";
-		
+
+
     // close the connection
     $conn->close();
 	}
