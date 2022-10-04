@@ -17,8 +17,8 @@ session_start();
 	if (isset($_POST['email']) && isset($_POST['password'])) {
 
 		//get userID and Password
-		$loginUserId = $_POST['email'];
-		$loginPassword = $_POST['password'];
+		$loginUserId = htmlspecialchars($_POST['email']);
+		$loginPassword =htmlspecialchars( $_POST['password']);
 		
 		//connect to the database
         $connection = new mysqli($server, $sqlUsername, $sqlPassword, $databaseName);

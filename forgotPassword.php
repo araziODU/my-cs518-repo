@@ -18,7 +18,7 @@ $errorMessage='';
 if (isset($_POST['email']))
 {
 	//get userID 
-	$loginUserId = $_POST['email'];
+	$loginUserId = htmlspecialchars($_POST['email']);
 
 	
 		//connect to the database

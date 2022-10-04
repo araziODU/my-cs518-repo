@@ -3,7 +3,7 @@
     $errorMessage = '';
     if (isset($_POST['verificationCode']))
     {
-        $enteredCode=$_POST['verificationCode'];
+        $enteredCode=htmlspecialchars($_POST['verificationCode']);
         // after login we move to the main page
 
         if($enteredCode==$_SESSION['dualAuthKey'])

@@ -20,47 +20,55 @@
 
 		if(!empty($loginPassword) &&!empty($reLoginPassword) &&!empty($firstName) &&!empty($lastName) &&!empty($email))
 		{
-		
-			if ($loginPassword == $reLoginPassword) {
+			if(filter_var($email, FILTER_VALIDATE_EMAIL))
+			{
+				if ($loginPassword == $reLoginPassword) {
 				
-				//connect to the database
-						$conn = new mysqli($server, $sqlUsername, $sqlPassword, $databaseName);
-				
-				//table to store username and password
-				$userTable = "users"; 
-
-				$ps = md5($loginPassword);
+					//connect to the database
+							$conn = new mysqli($server, $sqlUsername, $sqlPassword, $databaseName);
 					
-				$emailCheck="SELECT * FROM $userTable WHERE email='$email'";
-
-				$email_query=$conn->query($emailCheck);
-
-				if (mysqli_num_rows($email_query)<1)
-				{
-					// Formulate the SQL statment to find the user
-					$sql = "INSERT INTO $userTable ( `firstname`,`lastname`, `email`, `password`)  VALUES ( '$firstName','$lastName', '$email', '$ps')";
+					//table to store username and password
+					$userTable = "users"; 
+	
+					$ps = md5($loginPassword);
+						
+					$emailCheck="SELECT * FROM $userTable WHERE email='$email'";
+	
+					$email_query=$conn->query($emailCheck);
+	
+					if (mysqli_num_rows($email_query)<1)
+					{
+						// Formulate the SQL statment to find the user
+						$sql = "INSERT INTO $userTable ( `firstname`,`lastname`, `email`, `password`)  VALUES ( '$firstName','$lastName', '$email', '$ps')";
+						
+						// Execute the query
+								$query_result = $conn->query($sql)
+							or die( "SQL Query ERROR. User can not be created.");
+						
+						// Go to the login page
+						header('Location: index.php');
+							exit;
+	
+					}
+					else 
+					{
+						$errorMessage = "There is an account with that email already";
+					}
+	
+					 // close the connection
+			 $conn->close();
+				} 
+				else {
+					$errorMessage = "Passwords do not match";
 					
-					// Execute the query
-							$query_result = $conn->query($sql)
-						or die( "SQL Query ERROR. User can not be created.");
-					
-					// Go to the login page
-					header('Location: index.php');
-						exit;
-
 				}
-				else 
-				{
-					$errorMessage = "There is an account with that email already";
-				}
-
-				 // close the connection
- 		$conn->close();
-			} 
-			else {
-				$errorMessage = "Passwords do not match";
-				
 			}
+			else
+			{
+				$errorMessage = "Please enter a valid email";
+			}
+		
+			
 		}
 		else{
 			$errorMessage = "Please fill out all of the required infromation";
