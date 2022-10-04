@@ -11,11 +11,9 @@ $errorMessage='';
 if (!isset($_SESSION['db_is_logged_in'])
 	|| $_SESSION['db_is_logged_in'] != true) {
 	//not logged in, move to login page
-	header('Location: login.php');
+	header('Location: index.php');
 	exit;
-} else {
-}
-
+} 
 if(!isset($_GET['email'])){
 	die('Email not Provided');
 }
@@ -36,10 +34,6 @@ if (!$query_result) {
 }
 $row=$query_result->fetch_assoc();
 
-
-?>
-
-<?php
 //is email and Password provided?
 if (isset($_POST['email'],$_POST['firstName'],$_POST['lastName'] )){
 	$firstName = htmlspecialchars($_POST['firstName']);
@@ -68,6 +62,9 @@ if (isset($_POST['email'],$_POST['firstName'],$_POST['lastName'] )){
 	
 
 		header('Location: adminProfile.php');
+		
+		 // close the connection
+ 		$conn->close();
 		exit;
 
 }

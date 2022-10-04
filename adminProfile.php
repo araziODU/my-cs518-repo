@@ -2,17 +2,17 @@
 
 <html>
 	<head>
-		<title>Profile Page</title>
+		<title>Admin Profile Page</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" />
 		<link rel="stylesheet" href="styles.css" />
 	</head>
 		<div id="conteneur">
-		  <div id="header">Profile Page</div>
+		  <div id="header">Admin Profile Page</div>
 		
 		<?php include 'adminNavbar.php'; ?>
 	
 		  <div id="centre">
-			<h1>Profile Information </h1>
+			<h1>Admin Profile Information </h1>
 			<h2>To edit profile information press "Edit"</h2>
             <?php
 	//include information required to access database
@@ -25,7 +25,7 @@
 	if (!isset($_SESSION['db_is_logged_in'])
 		|| $_SESSION['db_is_logged_in'] != true) {
 		//not logged in, move to login page
-		header('Location: login.php');
+		header('Location: index.php');
 		exit;
 	} else {
 

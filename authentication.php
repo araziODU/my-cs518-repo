@@ -41,13 +41,13 @@
 		return true;
 	}
 
-	//function to authenticate user, and return TRUE or FALSE
+	//function to authenticate user who forgot their password, and return TRUE or FALSE
 	function authenticateUserForgotPassword($connection, $username)
 	{
-	  // User table which stores userid and password
+	  // User table which stores userid 
 	  $userTable = "users";
 
-	  // Test the username and password parameters
+	  // Test the username 
 	  if (!isset($username))
 		return false;
 

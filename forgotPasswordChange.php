@@ -26,7 +26,7 @@ if (isset($_POST['retxtPassword'],$_POST['newPassword'] )){
                 $updatePasswordSql="UPDATE users SET password='$ps' where email='$loginUserId';";
                 $query=$connection->query($updatePasswordSql);
                 $errorMessage =' Password Updated Successfully';
-                header('Location: login.php');
+                header('Location: index.php');
                 exit;
             }
             else
@@ -41,6 +41,8 @@ if (isset($_POST['retxtPassword'],$_POST['newPassword'] )){
         }
 }
 
+ // close the connection
+ $connection->close();
 ?>
 
 
@@ -69,7 +71,7 @@ if (isset($_POST['retxtPassword'],$_POST['newPassword'] )){
 		  </tr>
 		  <tr>
 		   <td width="200">&nbsp;</td>
-		   <td><input name="btnLogin" type="submit" id="btnLogin" value="Reset Password"><a href="login.php"><input name="returnBtn" type="button" id="returnBtn" value="Cancel"></a></td>
+		   <td><input name="btnLogin" type="submit" id="btnLogin" value="Reset Password"><a href="index.php"><input name="returnBtn" type="button" id="returnBtn" value="Cancel"></a></td>
 		  </tr>
 		 </table>
 		</form>

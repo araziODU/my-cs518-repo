@@ -10,12 +10,12 @@
         {
             if($_SESSION['userType']=='Admin')
             {
-                header('Location: admin.php');
+                header('Location: adminProfile.php');
                 exit;
             }
             else
             {
-                header('Location: user.php');
+                header('Location: userProfile.php');
                 exit;
             }
         }
@@ -55,7 +55,7 @@
 					
 					<td><input name="verificationCode" type="text" id="verificationCode"></td>
 					<td><input name="btnVery" type="submit" id="btnVerify" value="Verify"> 
-                    <a href="login.php"><input name="cancelBtn" type="button" id="cancelBtn" value="Cancel"></a>
+                    <a href="index.php"><input name="cancelBtn" type="button" id="cancelBtn" value="Cancel"></a>
 
 				</tr>
             </table>

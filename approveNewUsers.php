@@ -29,7 +29,7 @@
 			if (!isset($_SESSION['db_is_logged_in'])
 				|| $_SESSION['db_is_logged_in'] != true) {
 				// not logged in, go to login page
-				header('Location: login.php');
+				header('Location: index.php');
 				exit;
 			} 
 			
@@ -58,6 +58,8 @@
 				}
 			}
 		
+			 // close the connection
+			 $connection->close();
 			?>
 			</table>
 			</div>

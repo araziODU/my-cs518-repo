@@ -1,7 +1,6 @@
 <html>
 	<div id="haut">
 		<ul class="menuhaut">
-			<li><a href="admin.php">Main</a></li>
 			<li><a href="adminProfile.php">My Profile</a></li>
 			<li><a href="approveNewUsers.php">New Users Approval</a></li>
 			<li><a href="allApprovedUsers.php">All Approved Users</a></li>

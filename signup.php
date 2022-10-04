@@ -45,7 +45,7 @@
 						or die( "SQL Query ERROR. User can not be created.");
 					
 					// Go to the login page
-					header('Location: login.php');
+					header('Location: index.php');
 						exit;
 
 				}
@@ -53,6 +53,9 @@
 				{
 					$errorMessage = "There is an account with that email already";
 				}
+
+				 // close the connection
+ 		$conn->close();
 			} 
 			else {
 				$errorMessage = "Passwords do not match";
@@ -118,7 +121,7 @@
 		  </tr>
 		  <tr>
 		   <td width="200">&nbsp;</td>
-		   <td><input name="btnLogin" type="submit" id="btnLogin" value="Finish"><a href="login.php"><input name="returnBtn" type="button" id="returnBtn" value="Cancel"></a></td>
+		   <td><input name="btnLogin" type="submit" id="btnLogin" value="Finish"><a href="index.php"><input name="returnBtn" type="button" id="returnBtn" value="Cancel"></a></td>
 		  </tr>
 		 </table>
 		</form>

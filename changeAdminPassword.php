@@ -7,6 +7,13 @@ require 'authentication.php';
 session_start();
 $errorMessage = '';
 
+	//still logged in?
+	if (!isset($_SESSION['db_is_logged_in'])
+		|| $_SESSION['db_is_logged_in'] != true) {
+		//not logged in, move to login page
+		header('Location: index.php');
+		exit;
+	} 
 //connect to the database
 $connection = new mysqli($server, $sqlUsername, $sqlPassword, $databaseName);
 //check that the all password fields are set
@@ -47,6 +54,8 @@ if (isset($_POST['password'],$_POST['retxtPassword'],$_POST['newPassword'] )){
     }
 }
 
+ // close the connection
+ $connection->close();
 ?>
 
 

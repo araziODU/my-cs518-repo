@@ -49,7 +49,7 @@
 					
 					<td><input name="verificationCode" type="text" id="verificationCode"></td>
 					<td><input name="btnVery" type="submit" id="btnVerify" value="Verify"> 
-                    <a href="login.php"><input name="cancelBtn" type="button" id="cancelBtn" value="Cancel"></a>
+                    <a href="index.php"><input name="cancelBtn" type="button" id="cancelBtn" value="Cancel"></a>
 
 				</tr>
             </table>

@@ -13,6 +13,8 @@ require 'authentication.php';
 
 
 $errorMessage='';
+
+
 if (isset($_POST['email']))
 {
 	//get userID 
@@ -47,7 +49,9 @@ if (isset($_POST['email']))
 					header('Location: forgotPasswordAuth.php');
 				}
 		}
-
+		
+		 // close the connection
+ 		$connection->close();
 
 }
 ?>

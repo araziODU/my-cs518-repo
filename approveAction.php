@@ -11,5 +11,7 @@
 	$sql = "UPDATE users SET isApproved=1 where email = '$email';";
 	$result = $connection->query($sql);
     header('Location: approveNewUsers.php');
+	 // close the connection
+	 $connection->close();
 	
 ?>
