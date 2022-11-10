@@ -6,10 +6,13 @@
 			<li><a href="allApprovedUsers.php">All Approved Users</a></li>
 			<li><a href="changeAdminPassword.php">Change Password</a></li>
             <li><a href="logout.php">Logout</a></li>
-            <form action="search.php" method="GET">
+			<li>
+			<form action="search.php" method="GET">
 				<input type="text" placeholder="Search.." name="query" />
-				<input type="submit" value="Search" />
-			</form>
+				<input type="submit" name="action" value="Search" />
+				<input type="button"  name="action"  value="Search Annotation Tasks" />
+			</form>	
+			</li>
 		</ul>
 	</div>
 </html>

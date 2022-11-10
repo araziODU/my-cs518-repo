@@ -2,7 +2,7 @@
 
 	// Server, database name, sqluserid, and sqlpassword
 	$server = "localhost";
-    $sqlUsername = "myadmin";
+    $sqlUsername = "root";
     $sqlPassword = "862629Al!";
     $databaseName = "mydatabase";
 			
