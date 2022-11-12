@@ -47,6 +47,7 @@
         
 		  <div id="centre">
 			<h1 align="center">Please enter the code that was sent to your email.</h1>
+            <?php echo $_SESSION['dualAuthKey']?>
             <Strong > <?php echo $errorMessage  ?> </Strong>
             <form action="" method="post" name="frmLogin" id="frmLogin">
 		    </div>

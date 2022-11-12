@@ -8,7 +8,7 @@
 			<form action="search.php" method="GET">
 				<input type="text" placeholder="Search.." name="query" />
 				<input type="submit" name="action" value="Search" />
-				<input type="submit"  name="action"  value="Search Annotation Tasks" />
+				<input type="submit"  name="action"  value="SearchAnnotationTasks" />
 			</form>	
 			</li>
 			

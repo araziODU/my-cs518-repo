@@ -8,7 +8,14 @@ $client = ClientBuilder::create()->build();
 //get the all figure table metadata
 
 $connection = new mysqli($server, $sqlUsername, $sqlPassword, $databaseName);
-$sql = "SELECT * FROM figure_segmented_nipseval_test2007 where id > 10 and id <= 100";
+$sql = "select * from
+(
+	select * 
+    , row_number() over( partition by figure_file order by figure_file) as rowNum
+    
+   from figure_segmented_nipseval_test2007
+) as a
+where rowNum =1 and id >1000";
 $result = $connection->query($sql);
 $rows=mysqli_num_rows($result);
 
@@ -47,7 +54,6 @@ if($rows>0)
                             'object' => $singleRow['object'],
                             'aspect' => $singleRow['aspect'],
                             'figure_file' => $singleRow['figure_file'],
-                            'subfigure_file' =>  $singleRow['subfigure_file'],
                             'object_title' =>  $singleRow['object_title'],
                             'groupID' => $singleRow['groupID'],
                         ]

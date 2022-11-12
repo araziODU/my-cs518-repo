@@ -52,7 +52,7 @@ session_start();
 				$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 				$mail->SMTPAuth = true;
 				$mail->Username ='twofactorauthenticationcs518@gmail.com';
-				$mail->Password='xtkftvijmdqrhfye';
+				$mail->Password='gisfzcxybcefestw';
 				$mail->setFrom('noreply@gmail.com','noreply');
 				$mail->addAddress($loginUserId);
 				$mail->Subject='Two Factor Authentication';
