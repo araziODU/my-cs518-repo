@@ -142,9 +142,20 @@ tr:nth-child(even) {
 </style>
 	</head>
 		<div id="conteneur">
-		  <div id="header">User Page</div>
+            
+		 
 		
-		<?php include 'userNavbar.php'; ?>
+		<?php if ($_SESSION['userType']=='Admin')
+        {
+            echo " <div id=header>Admin Page</div>";
+            include 'adminNavBar.php';
+        }
+        else
+        {
+            echo " <div id=header>User Page</div>";
+            include 'userNavBar.php';
+        }
+            ?>
 	
 		  <div id="centre">
 			<h1>My assigned annotation tasks</h1>
@@ -169,7 +180,38 @@ tr:nth-child(even) {
                             <?php 
                             if($_GET['action'] == 'SearchAnnotationTasks')
                             {
-                                echo $r['_source']['assignments']['annotations']['subfigures'][0]['object'];
+                                //echo $r['_source']['assignments']['annotations']['subfigures'][0]['object'];
+                                {
+                                    $connection4 = new mysqli($server, $sqlUsername, $sqlPassword, $databaseName);
+                                    $objName= $r['_source']['compoundfigure_file'];
+                                
+                                    echo '<br>';
+                                    
+            
+                                    $sql4 = "select * from
+                                    (
+                                        select * 
+                                        , row_number() over( partition by figure_file order by figure_file) as rowNum
+                                        
+                                    from figure_segmented_nipseval_test2007
+                                    ) as a
+                                    where rowNum =1 and figure_file= '$objName'"; // run this twice starting from last index ran to increment this as it times out
+                                    
+                                    $result4 = $connection4->query($sql4);
+                                    $rows4=mysqli_num_rows($result4);
+            
+                                    //$dataArray=[];
+                                    if($rows4>0)
+                                                {
+                                                    $singleRow4 =$result4->fetch_assoc();
+                                                    
+                                                        echo  $singleRow4['object'];
+                                                    
+                                        
+                                                }
+                                            }
+            
+                                    
                             }
                             else
                             

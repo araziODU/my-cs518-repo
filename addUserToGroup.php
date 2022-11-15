@@ -92,10 +92,14 @@
 
                     $singleFigure=[
                         "subfigure_id" => $singleRow2['subfigure_file'],
-                        "object_correct" => "no",
-                        "object" => $singleRow2['object'],
-                        "aspect_correct" => "no",
-                        "aspect" => $singleRow2['aspect']
+                       
+                        //storing empty string
+                        "object_correct" => null,
+                        "object" => null, //$singleRow2['object'],
+                        //storing empty string
+                        "aspect_correct" => null,
+                        "aspect" => null, //$singleRow2['aspect']
+                        
 
                     ];
                         array_push($subfigures, $singleFigure);
@@ -114,8 +118,9 @@
                         "user" =>  $email,
                         "datetime" =>  $date,
                         "annotations" => [
-                            "seg_correct" => "no",
-                            "n_subfigure" => $rows2,
+                            "seg_correct" => null, //"no",
+                            "n_subfigure" =>null, // $rows2,
+                            
                             "subfigures"=>
                                $subfigures
 

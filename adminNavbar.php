@@ -8,13 +8,14 @@
 			<li><a href="assignTask.php">Assign Tasks</a></li>
 			<li><a href="viewAllTasks.php">View All Tasks</a></li>
             <li><a href="logout.php">Logout</a></li>
-
+			<li><a href="indexAllFigures.php">Index fields</a></li>
 			<form action="search.php" method="GET">
 				<input type="text" placeholder="Search.." name="query" />
 				<input type="submit" name="action" value="Search" />
-				<input type="button"  name="action"  value="SearchAnnotationTasks" />
+				<input type="submit"  name="action"  value="SearchAnnotationTasks" />
 			</form>	
 			</li>
+			
 		</ul>
 	</div>
 </html>
