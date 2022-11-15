@@ -3,6 +3,8 @@ session_start();
 require 'elastic-php/vendor/autoload.php';
 require  'authentication.php';
 use Elastic\Elasticsearch\ClientBuilder;
+
+
 $client = ClientBuilder::create()->build();
 if(isset($_GET['page'])){
     $currentPage=$_GET['page'];
@@ -12,7 +14,7 @@ else
     $currentPage=1;
 }
 
-$pageSize=10;
+$pageSize=5;
 $fromIndex=($currentPage-1)*$pageSize;
 // check which search button was pressed
 
@@ -30,8 +32,8 @@ $fromIndex=($currentPage-1)*$pageSize;
             'body' => [
                 'query' => [
                     'bool' => [
-                        'should' => [
-                            'match' => ['object_title' => $crit]
+                        'must' => [
+                            'match_phrase' => ['object_title' => $crit]
                         ]
                     ]
                 ]
@@ -50,8 +52,8 @@ $fromIndex=($currentPage-1)*$pageSize;
             'body' => [
                 'query' => [
                     'bool' => [
-                        'should' => [
-                            'match' => ['object_title' => $crit]
+                        'must' => [
+                            'match_phrase' => ['object_title' => $crit]
                         ]
                     ]
                 ]
@@ -74,6 +76,7 @@ $fromIndex=($currentPage-1)*$pageSize;
                     while($singleRow3 =$result3->fetch_assoc())
                     {
                         $email=$singleRow3['email'];
+                        echo $email;
                     }
                 }
     
@@ -84,8 +87,8 @@ $fromIndex=($currentPage-1)*$pageSize;
                     'body' => [
                         'query' => [
                             'bool' => [
-                                'should' => [
-                                    'match' => ['assignments.user' => $email]
+                                'must' => [
+                                    'match_phrase' => ['assignments.user' => $email]
                                 ]
                             ]
                         ]
@@ -97,11 +100,12 @@ $fromIndex=($currentPage-1)*$pageSize;
         }
         
         $totalCount= $client->count([
+            'index' => 'annotations',
             'body' => [
                 'query' => [
                     'bool' => [
-                        'should' => [
-                            'match' => ['assignments.user' => $email]
+                        'must' => [
+                            'match_phrase' => ['assignments.user' => $email]
                         ]
                     ]
                 ]
@@ -195,7 +199,7 @@ tr:nth-child(even) {
                                         
                                     from figure_segmented_nipseval_test2007
                                     ) as a
-                                    where rowNum =1 and figure_file= '$objName'"; // run this twice starting from last index ran to increment this as it times out
+                                    where rowNum =1 and figure_file= '$objName'"; 
                                     
                                     $result4 = $connection4->query($sql4);
                                     $rows4=mysqli_num_rows($result4);

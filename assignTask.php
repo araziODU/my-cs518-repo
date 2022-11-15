@@ -1,5 +1,6 @@
 <html>
 	<head>
+	
 		<title>Admin Page</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" />
 		<link rel="stylesheet" href="styles.css" />
@@ -25,7 +26,7 @@
 			<?php
 			 session_start();
 			 require 'authentication.php';	
-			
+
 
 			//is the person accessing this page logged in?
 			if (!isset($_SESSION['db_is_logged_in'])

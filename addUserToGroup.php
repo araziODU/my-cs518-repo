@@ -24,11 +24,13 @@
             }
 
     $totalCount= $client->count([
+        'index' => 'figures',
+        'type' => 'figure',
         'body' => [
             'query' => [
                 'bool' => [
                     'should' => [
-                        'match' => ['groupID' =>  $group]
+                        'match_phrase' => ['groupID' =>  $group]
                     ]
                 ]
             ]
@@ -57,11 +59,14 @@
    
 
     $query= $client -> search([
+        'index' => 'figures',
+        'type' => 'figure',
+        'size' => 10000,
         'body' => [
             'query' => [
                 'bool' => [
                     'should' => [
-                        'match' => ['groupID' => $group]
+                        'match_phrase' => ['groupID' => $group]
                     ]
                 ]
             ]
@@ -72,7 +77,7 @@
      {
          $results = $query['hits']['hits'];
      }
-     
+     $indexedNumb=0;
      if(isset($results)) {
         foreach($results as $r)
         {
@@ -110,7 +115,7 @@
             $obj =json_encode($subfigures);
             $indexed= $client->index([
                 'index' => 'annotations',
-                'type' => 'figure',
+                'type' => 'annotation',
                 'body' => [
                     'compoundfigure_file' =>   $r['_source']['figure_file'],
                     'assignments'=> [
@@ -129,10 +134,11 @@
                 ]
                 ]
             ]);
+            $indexedNumb++;
         }
     }
      
- 
+
 	 // close the connection
 	 $connection->close();
      header('Location: assignTask.php');
