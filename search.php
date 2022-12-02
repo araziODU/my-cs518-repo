@@ -124,6 +124,10 @@ $fromIndex=($currentPage-1)*$pageSize;
 		<title>Search Results</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" />
 		<link rel="stylesheet" href="styles.css" />
+        <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+		<link rel="manifest" href="favicon/site.webmanifest">
         <style>
 table {
   font-family: arial, sans-serif;
@@ -146,17 +150,14 @@ tr:nth-child(even) {
 </style>
 	</head>
 		<div id="conteneur">
-            
-		 
-		
 		<?php if ($_SESSION['userType']=='Admin')
         {
-            echo " <div id=header>Admin Page</div>";
+            echo " <div id=header> <img src=favicon/favicon-32x32.png> Figure Annotation | Admin Page</div>";
             include 'adminNavBar.php';
         }
         else
         {
-            echo " <div id=header>User Page</div>";
+            echo " <div id=header> <img src=favicon/favicon-32x32.png> Figure Annotation | User Page</div>";
             include 'userNavBar.php';
         }
             ?>
@@ -165,6 +166,7 @@ tr:nth-child(even) {
 			<h1>My assigned annotation tasks</h1>
             <h2>Total Results for your search:<?php  echo $totalCount['count'];  ?> </h2>
 			</div>
+            
             <table>
                 <tr>
                     <th>Title</th>
@@ -180,7 +182,62 @@ tr:nth-child(even) {
                         
                         <tr>
                         
-                        <th><a href="#<?php echo $r['_id']; ?>" >
+                        <th>
+                            
+                        <a href="viewAnnotation.php?fig=<?php 
+                            if($_GET['action'] == 'SearchAnnotationTasks')
+                            {
+                                //echo $r['_source']['assignments']['annotations']['subfigures'][0]['object'];
+                                {
+                                    $connection4 = new mysqli($server, $sqlUsername, $sqlPassword, $databaseName);
+                                    $objName= $r['_source']['compoundfigure_file'];
+                                
+                                    echo '<br>';
+                                    
+            
+                                    $sql4 = "select * from
+                                    (
+                                        select * 
+                                        , row_number() over( partition by figure_file order by figure_file) as rowNum
+                                        
+                                    from figure_segmented_nipseval_test2007
+                                    ) as a
+                                    where rowNum =1 and figure_file= '$objName'"; 
+                                    
+                                    $result4 = $connection4->query($sql4);
+                                    $rows4=mysqli_num_rows($result4);
+            
+                                    //$dataArray=[];
+                                    if($rows4>0)
+                                                {
+                                                    $singleRow4 =$result4->fetch_assoc();
+                                                    
+                                                        echo  $singleRow4['object'];
+                                                    
+                                        
+                                                }
+                                            }
+            
+                                    
+                            }
+                            else
+                            
+                            echo $r['_source']['object_title']; ?>
+                            
+                            &pic=<?php 
+                            if($_GET['action'] == 'SearchAnnotationTasks')
+                            {
+                                echo $r['_source']['compoundfigure_file'];
+                            }
+                            else
+                            echo $r['_source']['figure_file']; 
+                            
+                            ?>" >
+
+
+
+
+
                             <?php 
                             if($_GET['action'] == 'SearchAnnotationTasks')
                             {
@@ -326,5 +383,8 @@ tr:nth-child(even) {
             <th><a href="search.php?query=<?php echo $crit."&action=".$_GET['action']."&page=".$totalPages; ?>"> >> </a> </th>
             </tr>
                 </table>
+		</div>
+        <div class="myFooter">
+			<p >Website created by Alexander Razikov | <img src="favicon/favicon-32x32.png"> Figure Annotation  | <a href = "mailto: arazi002@odu.edu">Contact Me</a></p>
 		</div>
 </html>

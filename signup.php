@@ -87,13 +87,17 @@
 		<title>Sign Up</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
         <link rel="stylesheet" href="styles.css" />
+		<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+		<link rel="manifest" href="favicon/site.webmanifest">
 	</head>
 
 	<body>
 		
 
         <div id="conteneur">
-		  <div id="header">Sign Up</div>
+		  <div id="header"> <img src="favicon/favicon-32x32.png"> Figure Annotation | Sign Up</div>
 		  <div id="centre">
 			
 		
@@ -134,6 +138,9 @@
 		 </table>
 		</form>
         </div>
+		</div>
+		<div class="myFooter">
+			<p >Website created by Alexander Razikov | <img src="favicon/favicon-32x32.png"> Figure Annotation  | <a href = "mailto: arazi002@odu.edu">Contact Me</a></p>
 		</div>
 	</body>
 </html>

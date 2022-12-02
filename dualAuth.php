@@ -26,7 +26,7 @@
        
     }
     else{
-        $errorMessage = 'Please enter the verification code that was sent to your email';
+        $errorMessage = '';
     }
 
 			
@@ -39,15 +39,19 @@
 		<title>Dual Authentication</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" />
 		<link rel="stylesheet" href="styles.css" />
+        <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+		<link rel="manifest" href="favicon/site.webmanifest">
     
 	</head>
+    <body>
 		<div id="conteneur">
-		  <div id="header">Dual Authentication</div>
+		  <div id="header"> <img src="favicon/favicon-32x32.png"> Figure Annotation | Dual Authentication</div>
 		
         
 		  <div id="centre">
 			<h1 align="center">Please enter the code that was sent to your email.</h1>
-            <?php echo $_SESSION['dualAuthKey']?>
             <Strong > <?php echo $errorMessage  ?> </Strong>
             <form action="" method="post" name="frmLogin" id="frmLogin">
 		    </div>
@@ -62,6 +66,11 @@
             </table>
             </form>
 		</div>
+        </body>
+        <div class="myFooter">
+			<p >Website created by Alexander Razikov | <img src="favicon/favicon-32x32.png"> Figure Annotation  | <a href = "mailto: arazi002@odu.edu">Contact Me</a></p>
+		</div>
+        
 </html>
 
 

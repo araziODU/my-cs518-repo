@@ -6,12 +6,15 @@ from: https://github.com/lamps-lab/cs418518-f22/tree/main/example/website
 
 */
 
+
+
 #centre {
 border:1px solid #202020;
 border-bottom:0;
 border-top:0;
 color:#000;
 padding:1.5em;
+
 }
 
 #conteneur {
@@ -71,6 +74,22 @@ margin:0;
 padding:0.6em 10px;
 }
 
+div.myFooter {
+  position: fixed;
+  left: 6;
+  bottom: 0;
+  width: 100%;
+  background-color: #3882C7;
+  color: white;
+  text-align: center;
+  display: inline-block;
+  margin:0 10%;
+  width:80%;
+  border:1px solid #202020;
+  
+}
+
+
 a {
 color:#000;
 text-decoration:underline;
@@ -100,6 +119,7 @@ margin:0.8em 0.5em 0.3em 0.8em;
 h4 {
 font-size:1em;
 margin:0.7em 0.5em 0.3em 1em;
+float: right;
 }
 
 h5 {
@@ -110,3 +130,5 @@ margin:0.6em 0.5em 0.2em 1.5em;
 p {
 margin:1px 0.5em 0.5em 1.5em;
 }
+
+
