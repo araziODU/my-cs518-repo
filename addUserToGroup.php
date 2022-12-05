@@ -100,10 +100,10 @@
                        
                         //storing empty string
                         "object_correct" => null,
-                        "object" => null, //$singleRow2['object'],
+                        "object" => $singleRow2['object'], //=> null,
                         //storing empty string
                         "aspect_correct" => null,
-                        "aspect" => null, //$singleRow2['aspect']
+                        "aspect" => $singleRow2['aspect'] //=> null,
                         
 
                     ];

@@ -8,21 +8,91 @@ use Elastic\Elasticsearch\ClientBuilder;
 $client = ClientBuilder::create()->build();
 if(isset($_GET['fig'])){
     $figName=$_GET['fig'];
+    
+
+
 }
 
-
+$errorMessage="";
 if(isset($_GET['pic'])){
     $picName=$_GET['pic'];
+    //echo $picName;
+    $query= $client -> search([
+      'index' => 'annotations',
+      'body' => [
+          'query' => [
+              'bool' => [
+                  'must' => [
+                      'match_phrase' => ['compoundfigure_file' => $picName]
+                  ]
+              ]
+          ]
+      ]
+  ]);
+
+  //echo $query->getBody();
+  if ( $query['hits']['total'] >= 1)
+  {
+    //echo "<br>total items:".$query['hits']['total']['value'];
+      $results = $query['hits']['hits'][0]['_source']['assignments']['annotations']['subfigures'];
+     // echo "<br>testField:       ".$query['hits']['hits'][0]['_source']['compoundfigure_file']; WORKS
+    // echo "<br>testField:       ".$query['hits']['hits'][0]['_source']['assignments']['annotations']['subfigures'][0]['subfigure_id'];
+  }
 }
+$formattedfig=str_replace(' ',"%20",$figName);
+$formattedpic=str_replace(' ',"%20",$picName);
+$redirectHeader="viewAnnotation.php?fig=".$formattedfig."&pic=".$formattedpic;
+$id='a';
+if ( isset($_POST['action']))
+                {
+                  //validate the compound figure
 
-//display the right side
-    //display the segemented subfigures
-    //display  the 
+                  if(!isset($_POST['question1']) || empty($_POST['question2']) )
+                  {
+                    $errorMessage="Please fill out all questions";
+                  
+                  }
+                  //validate the segemented figures
+                  else{
+                  
+                  $startingFigure='a';
+                  $questionNumber=1;
+                  $missingData=false;
+                 
+                  //for each segemented figure check that a. and c. are answered
+                  for( $startingFigure; $startingFigure<$id ; $startingFigure++ )
+                  {
+                    if(!isset($_POST[$startingFigure.'1']) || !isset($_POST[$startingFigure.'3']) )
+                    {
+                      $missingData=true;
+                    }
+                    else if($_POST[$startingFigure.'1']=="no" && empty($_POST[$startingFigure.'2']) )
+                    {
+                      $missingData=true;
+                    }
+                    else if($_POST[$startingFigure.'3']=="no" && empty($_POST[$startingFigure.'4']) )
+                    {
+                      $missingData=true;
+                    }
+                  }
+                    if( $missingData==true)
+                    {
+                      $errorMessage="Please fill out all questions";
+                  
+                    }
+                    else
+                    {
+                      header('Location: search.php?query=&action=SearchAnnotationTasks');
+                    }
 
+                }
 
-//display the left side
-
-?>
+                    //if a. is "no" and b. is empty show error
+                    // if c is "no" and d is empty show error                  
+                }
+                
+                
+                ?>
 
 
 
@@ -42,14 +112,16 @@ table {
   font-family: arial, sans-serif;
   border: 1px solid black;
   border-collapse: collapse;
-  width: 80%;
+  table-layout: fixed ;
+  width: 90%;
   margin-left: 30px;
 }
 
 td, th {
-  border: 1px solid #dddddd;
+  border: 5px solid #dddddd;
   text-align: left;
   padding: 8px;
+  width: 25% ;
 }
 
 tr:nth-child(even) {
@@ -69,46 +141,117 @@ p{
 	
 		  <div id="centre">
 			<h1>Annotation</h1>
-            <form>
+      <Strong> <?php echo $errorMessage ?> </Strong>
+            <form action="" method="post">
             <table>
+              
                 <tr>
                     <th>
+                    <h2>Compound Figure</h2>
                     
-                    <?php echo $figName; ?>
                         <br> 
-                        <img src="figures/<?php echo $picName; ?>" width="200" height ="200">
+                        <img src="figures/<?php echo $picName; ?>" width="50%" height ="50%"><br>
+                        <?php echo $figName; ?><br>
                         
                         
+                        <br><p>a. Are the original figure segmented correctly?</p>
                         
-                        <p>a. Are the original figure segmented correctly?</p>
-                        
-                        <input type="radio" id="a1" name="q1" value="yes">
-                        <label for="a1">yes</label><br>
-                        <input type="radio" id="a2" name="q1" value="no">
-                        <label for="a2">no</label><br>
-                        <input type="radio" id="a3" name="q1" value="unknown">
-                        <label for="a3">unknown</label><br>
+                        <input type="radio" id="compound1" name="question1" value="yes">
+                        <label for="compound1">yes</label><br>
+                        <input type="radio" id="compound2" name="question1" value="no">
+                        <label for="compound2">no</label><br>
+                        <input type="radio" id="compound3" name="question1" value="unknown">
+                        <label for="compound3">unknown</label><br>
 
 
                         <p>b. How many subfigures should be segmented from the original figure?</p>
                         
-                        <input type="text" id="b1" name="q2">
+                        <input type="text" id="compound4" name="question2">
  
                 
                     </th>
 
                     <th>
+                    <h2>Segmented Figures</h2>
                         <table>
+              
                             <?php
-
+                            if(isset($results)) {
+                              
+                             
+                              
+                              //echo $results['hits'][0]['_source']['assignments'];//['annotations']['subfigures'][0]['subfigure_id'];
+                              foreach($results as $r) //['hits']['_source']['assignments']['annotations']['subfigures']
+                              {  $idNumb=1;
+                                $q=1;
+                                $connection = new mysqli($server, $sqlUsername, $sqlPassword, $databaseName);
+                                $subName=$r['subfigure_id'];
+                                $sql = "select * from figure_segmented_nipseval_test2007 where  subfigure_file= '$subName'"; 
+                                $sqlresult = $connection->query($sql);
+                                $rows=mysqli_num_rows($sqlresult);
+                                if($rows>0)
+                                                {
+                                                    $singleRow =$sqlresult->fetch_assoc();
+                                                }
                             ?>
 
-                        </table>               
+                  <div class="result">
+                        
+                        
+                        <th><img src="figures/<?php 
+                       
+                        echo $r['subfigure_id']; 
+                        
+                        ?>" width="80%" height ="80%" >
+                       <p>Caption: <?php echo $singleRow['caption']?> </p> 
+                       <p>Figure ID: <?php echo $singleRow['figid']?></p> 
+                       <p>Object: <?php echo $singleRow['object']?></p> 
+                       <p>Aspect: <?php echo $singleRow['aspect']?></p> <br>
+
+                       <p>a. Is the object identified correctly?</p>
+                        <input type="radio" id=<?php echo $id.$idNumb; ?> name=<?php echo $id.$q; ?> value="yes">
+                        <label for=<?php echo $id.$idNumb ?>>yes</label><br>
+                        <input type="radio" id=<?php $idNumb++; echo $id.$idNumb; ?> name=<?php echo $id.$q; ?> value="no">
+                        <label for=<?php echo $id.$idNumb; ?>>no</label><br>
+                        <input type="radio" id=<?php $idNumb++; echo $id.$idNumb; ?> name=<?php echo $id.$q; ?> value="unknown">
+                        <label for=<?php echo $id.$idNumb; ?>>unknown</label><br>
+
+                        <p>b. What's the correct object if you answered "no" above?</p>
+                        
+                        <input type="text" id=<?php $idNumb++; echo $id.$idNumb; ?> name=<?php $q++; echo $id.$q; ?>>
+
+
+                        <p>c. Is the aspect identified correctly?</p>
+                        <input type="radio" id=<?php $idNumb++; echo $id.$idNumb; ?> name=<?php $q++; echo $id.$q; ?> value="yes">
+                        <label for=<?php echo $id.$idNumb ?>>yes</label><br>
+                        <input type="radio" id=<?php $idNumb++; echo $id.$idNumb; ?> name=<?php echo $id.$q; ?> value="no">
+                        <label for=<?php echo $id.$idNumb; ?>>no</label><br>
+                        <input type="radio" id=<?php $idNumb++; echo $id.$idNumb; ?> name=<?php echo $id.$q; ?> value="unknown">
+                        <label for=<?php echo $id.$idNumb; ?>>unknown</label><br>
+
+                        <p>d. What's the correct aspect if you answered "no" above?</p>
+                        
+                        <input type="text" id=<?php $idNumb++; echo $id.$idNumb; ?> name=<?php $q++; echo $id.$q; ?>>
+                       
+                      </th>
+
+                              </div>
+
+                            <?php
+                             $id++;
+                             
+                            }
+                            }
+                            ?>
+
+                        </table>    
+
                     </th>
                     
                     
                 </tr>  
-                <tr><th> <input type="submit" value="Submit"></th><th></th></tr> 
+                <tr><th> <input type="submit"  name="action"  value="Search" /></th><th></th></tr> 
+                
             </table>
             
             </form>

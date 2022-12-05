@@ -18,8 +18,10 @@ $pageSize=5;
 $fromIndex=($currentPage-1)*$pageSize;
 // check which search button was pressed
 
-
+if(isset($_GET['query'])){
     $crit=$_GET['query'];
+}
+   
    
    
     if($_GET['action'] == 'Search' )
@@ -76,7 +78,7 @@ $fromIndex=($currentPage-1)*$pageSize;
                     while($singleRow3 =$result3->fetch_assoc())
                     {
                         $email=$singleRow3['email'];
-                        echo $email;
+                       
                     }
                 }
     
@@ -192,7 +194,7 @@ tr:nth-child(even) {
                                     $connection4 = new mysqli($server, $sqlUsername, $sqlPassword, $databaseName);
                                     $objName= $r['_source']['compoundfigure_file'];
                                 
-                                    echo '<br>';
+                                    //echo '<br>';
                                     
             
                                     $sql4 = "select * from
@@ -211,8 +213,10 @@ tr:nth-child(even) {
                                     if($rows4>0)
                                                 {
                                                     $singleRow4 =$result4->fetch_assoc();
+                                                   
                                                     
-                                                        echo  $singleRow4['object'];
+                                                        echo strval($singleRow4['object']) ;
+                                                       
                                                     
                                         
                                                 }
@@ -222,9 +226,7 @@ tr:nth-child(even) {
                             }
                             else
                             
-                            echo $r['_source']['object_title']; ?>
-                            
-                            &pic=<?php 
+                            echo $r['_source']['object_title']; ?>&pic=<?php 
                             if($_GET['action'] == 'SearchAnnotationTasks')
                             {
                                 echo $r['_source']['compoundfigure_file'];
