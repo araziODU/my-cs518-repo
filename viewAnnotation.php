@@ -31,12 +31,13 @@ if(isset($_GET['pic'])){
   ]);
 
   //echo $query->getBody();
-  if ( $query['hits']['total'] >= 1)
+  if ( $query['hits']['total']['value'] >= 1)
   {
     //echo "<br>total items:".$query['hits']['total']['value'];
       $results = $query['hits']['hits'][0]['_source']['assignments']['annotations']['subfigures'];
      // echo "<br>testField:       ".$query['hits']['hits'][0]['_source']['compoundfigure_file']; WORKS
     // echo "<br>testField:       ".$query['hits']['hits'][0]['_source']['assignments']['annotations']['subfigures'][0]['subfigure_id'];
+    $queryIdParam=$query['hits']['hits'][0]['_id'];
   }
 }
 $formattedfig=str_replace(' ',"%20",$figName);
@@ -82,6 +83,67 @@ if ( isset($_POST['action']))
                     }
                     else
                     {
+                      //update the database to increment the count of completed
+                      $connection2 = new mysqli($server, $sqlUsername, $sqlPassword, $databaseName);
+                                
+                                $sql2 = "select * from figure_segmented_nipseval_test2007 where  figure_file= '$picName' LIMIT 1"; 
+                                $sqlresult2 = $connection2->query($sql2);
+                                $rows2=mysqli_num_rows($sqlresult2);
+                                if($rows2>0)
+                                                {
+                                                    $singleRow =$sqlresult2->fetch_assoc();
+                                                    $groupId=$singleRow['groupID'];
+                                                    $user=$_SESSION['userID'];
+                                                    $sql4="select * from users where email =  '$user'";
+                                                    $sqlresult4 = $connection2->query($sql4);
+                                                    $singleRow4=$sqlresult4->fetch_assoc();
+                                                    $userId= $singleRow4['userId'];
+                                                    echo $userId;
+                                                    $sql3="Update annotations set `finished`=`finished`+1  where `group_id`= '$groupId' and `user_id`=' $userId'";
+                                                    $sqlresult3 = $connection2->query($sql3);
+                                                }
+
+
+                      //udpate the annotations in elastic search so they don't show up again
+                      $subfigures=array();
+                      $startingFigure='a';
+                                    foreach( $results as $r)
+                                    {
+                                      $singleFigure=[
+                                        
+                                        "subfigure_id" => $r['subfigure_id'],
+                                        //storing empty string
+                                        "object_correct" => $_POST[$startingFigure.'1'],
+                                        "object" => $r['object'], //=> null,
+                                        //storing empty string
+                                        "aspect_correct" => $_POST[$startingFigure.'3'],
+                                        "aspect" => $r['aspect'] //=> null,
+                                     
+                                       
+                
+                                    ];
+                                        array_push($subfigures, $singleFigure);
+                                        $startingFigure++;
+                                    }
+                      $updated= $client->update([
+                        'index' => 'annotations',
+                        'id' => $queryIdParam,
+                        'body' => [
+                          'doc' =>[
+                            'assignments'=> [
+                                "annotations" => [
+                                    "seg_correct" => $_POST['question1'], //"no",
+                                    "n_subfigure" =>$_POST['question2'], // $rows2,
+                                    "subfigures"=>
+                                       $subfigures
+        
+                                                  
+                            ]
+                        ]
+                        ]
+                        ]
+                    ]);
+
                       header('Location: search.php?query=&action=SearchAnnotationTasks');
                     }
 
@@ -141,7 +203,7 @@ p{
 	
 		  <div id="centre">
 			<h1>Annotation</h1>
-      <Strong> <?php echo $errorMessage ?> </Strong>
+      <Strong style="color: red"> <?php echo $errorMessage ?> </Strong>
             <form action="" method="post">
             <table>
               
@@ -151,7 +213,8 @@ p{
                     
                         <br> 
                         <img src="figures/<?php echo $picName; ?>" width="50%" height ="50%"><br>
-                        <?php echo $figName; ?><br>
+                       <p>File name: <?php echo $picName; ?> </p>
+                       <p>Figure name: <?php echo $figName; ?> </p>
                         
                         
                         <br><p>a. Are the original figure segmented correctly?</p>

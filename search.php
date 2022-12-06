@@ -89,8 +89,11 @@ if(isset($_GET['query'])){
                     'body' => [
                         'query' => [
                             'bool' => [
+                                'must_not' => [
+                                    'exists' => ['field'=>'assignments.annotations.seg_correct' ]
+                                ],
                                 'must' => [
-                                    'match_phrase' => ['assignments.user' => $email]
+                                    'match_phrase' => ['assignments.user'=>$email]
                                 ]
                             ]
                         ]
@@ -106,8 +109,11 @@ if(isset($_GET['query'])){
             'body' => [
                 'query' => [
                     'bool' => [
+                        'must_not' => [
+                            'exists' => ['field'=>'assignments.annotations.seg_correct' ]
+                        ],
                         'must' => [
-                            'match_phrase' => ['assignments.user' => $email]
+                            'match_phrase' => ['assignments.user'=>$email]
                         ]
                     ]
                 ]
@@ -296,11 +302,21 @@ tr:nth-child(even) {
                 }
             }
             ?>
+            
             </table>
             <br>
             <table>
             <tr>
             <th><a href="search.php?query=<?php echo $crit."&action=".$_GET['action']."&page=1"; ?>"> <<  </a> </th>
+            <th><a href="search.php?query=<?php 
+            if($currentPage-1<1)
+            {
+                echo $crit."&action=".$_GET['action']."&page=1";
+            }
+            else{
+                echo $crit."&action=".$_GET['action']."&page=".$currentPage-1;
+            }
+            ?>"> < </a> </th>
             <th style="text-align:center">
             
             <?php
@@ -382,11 +398,25 @@ tr:nth-child(even) {
             }
                 ?>
         </th>
+        <th><a href="search.php?query=<?php
+        if($currentPage+1 > $totalPages)
+        {
+            echo $crit."&action=".$_GET['action']."&page=".$totalPages;
+        }
+        else{
+            echo $crit."&action=".$_GET['action']."&page=".$currentPage+1; 
+        }
+       
+        
+        ?>"> ></a> </th>
             <th><a href="search.php?query=<?php echo $crit."&action=".$_GET['action']."&page=".$totalPages; ?>"> >> </a> </th>
             </tr>
                 </table>
+                <br><br><br>
 		</div>
-        <div class="myFooter">
+        
+<div class="myFooter">
 			<p >Website created by Alexander Razikov | <img src="favicon/favicon-32x32.png"> Figure Annotation  | <a href = "mailto: arazi002@odu.edu">Contact Me</a></p>
 		</div>
+        
 </html>
