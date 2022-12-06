@@ -43,9 +43,18 @@ if(isset($_GET['pic'])){
 $formattedfig=str_replace(' ',"%20",$figName);
 $formattedpic=str_replace(' ',"%20",$picName);
 $redirectHeader="viewAnnotation.php?fig=".$formattedfig."&pic=".$formattedpic;
-$id='a';
-if ( isset($_POST['action']))
+$id2='a';
+
+if(isset($results)) {
+  foreach($results as $r) //['hits']['_source']['assignments']['annotations']['subfigures']
+  {
+    $id2++;
+  }
+}
+
+if ( isset($_POST['submit']))
                 {
+                 
                   //validate the compound figure
 
                   if(!isset($_POST['question1']) || empty($_POST['question2']) )
@@ -61,7 +70,7 @@ if ( isset($_POST['action']))
                   $missingData=false;
                  
                   //for each segemented figure check that a. and c. are answered
-                  for( $startingFigure; $startingFigure<$id ; $startingFigure++ )
+                  for( $startingFigure; $startingFigure<$id2 ; $startingFigure++ )
                   {
                     if(!isset($_POST[$startingFigure.'1']) || !isset($_POST[$startingFigure.'3']) )
                     {
@@ -143,7 +152,7 @@ if ( isset($_POST['action']))
                         ]
                         ]
                     ]);
-
+                      sleep(1);
                       header('Location: search.php?query=&action=SearchAnnotationTasks');
                     }
 
@@ -203,12 +212,12 @@ p{
 	
 		  <div id="centre">
 			<h1>Annotation</h1>
-      <Strong style="color: red"> <?php echo $errorMessage ?> </Strong>
+      <p><Strong style="color: red"> <?php echo $errorMessage ?> </Strong><p>
             <form action="" method="post">
             <table>
               
                 <tr>
-                    <th>
+                    <th VALIGN=TOP>
                     <h2>Compound Figure</h2>
                     
                         <br> 
@@ -241,7 +250,7 @@ p{
                             <?php
                             if(isset($results)) {
                               
-                             
+                              $id='a';
                               
                               //echo $results['hits'][0]['_source']['assignments'];//['annotations']['subfigures'][0]['subfigure_id'];
                               foreach($results as $r) //['hits']['_source']['assignments']['annotations']['subfigures']
@@ -261,11 +270,11 @@ p{
                   <div class="result">
                         
                         
-                        <th><img src="figures/<?php 
+                        <tr><th><img src="figures/<?php 
                        
                         echo $r['subfigure_id']; 
                         
-                        ?>" width="80%" height ="80%" >
+                        ?>" width="50%" height ="50%" >
                        <p>Caption: <?php echo $singleRow['caption']?> </p> 
                        <p>Figure ID: <?php echo $singleRow['figid']?></p> 
                        <p>Object: <?php echo $singleRow['object']?></p> 
@@ -296,7 +305,7 @@ p{
                         
                         <input type="text" id=<?php $idNumb++; echo $id.$idNumb; ?> name=<?php $q++; echo $id.$q; ?>>
                        
-                      </th>
+                                              </th> </tr>
 
                               </div>
 
@@ -313,7 +322,7 @@ p{
                     
                     
                 </tr>  
-                <tr><th> <input type="submit"  name="action"  value="Search" /></th><th></th></tr> 
+                <tr><th> <input type="submit"  name="submit"  value="Submit" /></th><th></th></tr> 
                 
             </table>
             

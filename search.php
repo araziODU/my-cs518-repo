@@ -171,7 +171,15 @@ tr:nth-child(even) {
             ?>
 	
 		  <div id="centre">
-			<h1>My assigned annotation tasks</h1>
+			<h1>
+            <?php 
+                            if($_GET['action'] == 'SearchAnnotationTasks')    
+                            {
+                                echo "My assigned annotation tasks";
+                            }
+                            else echo "Annotation Tasks";
+                            ?>
+            </h1>
             <h2>Total Results for your search:<?php  echo $totalCount['count'];  ?> </h2>
 			</div>
             
@@ -192,7 +200,7 @@ tr:nth-child(even) {
                         
                         <th>
                             
-                        <a href="viewAnnotation.php?fig=<?php 
+                       <?php 
                             if($_GET['action'] == 'SearchAnnotationTasks')
                             {
                                 //echo $r['_source']['assignments']['annotations']['subfigures'][0]['object'];
@@ -219,9 +227,9 @@ tr:nth-child(even) {
                                     if($rows4>0)
                                                 {
                                                     $singleRow4 =$result4->fetch_assoc();
-                                                   
+                                                    $formfig=str_replace(' ',"%20",$singleRow4['object']);
                                                     
-                                                        echo strval($singleRow4['object']) ;
+                                                        echo " <a href=viewAnnotation.php?fig=".$formfig."&pic=".$r['_source']['compoundfigure_file'].">" ;
                                                        
                                                     
                                         
@@ -232,15 +240,9 @@ tr:nth-child(even) {
                             }
                             else
                             
-                            echo $r['_source']['object_title']; ?>&pic=<?php 
-                            if($_GET['action'] == 'SearchAnnotationTasks')
-                            {
-                                echo $r['_source']['compoundfigure_file'];
-                            }
-                            else
-                            echo $r['_source']['figure_file']; 
+                            echo  $r['_source']['object_title']; ?>
                             
-                            ?>" >
+                            
 
 
 
@@ -254,7 +256,7 @@ tr:nth-child(even) {
                                     $connection4 = new mysqli($server, $sqlUsername, $sqlPassword, $databaseName);
                                     $objName= $r['_source']['compoundfigure_file'];
                                 
-                                    echo '<br>';
+                                 
                                     
             
                                     $sql4 = "select * from
@@ -282,9 +284,10 @@ tr:nth-child(even) {
             
                                     
                             }
+                            /*
                             else
                             
-                            echo $r['_source']['object_title']; ?>
+                            echo $r['_source']['object_title']; */?>
                         </a></th>
                         <th><img src="figures/<?php 
                         if($_GET['action'] == 'SearchAnnotationTasks')
